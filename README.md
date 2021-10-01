@@ -37,3 +37,5 @@ export function Header() {
 
 ### Contexto do Projeto
 
+![fluxo-de-aplicação (1)](https://user-images.githubusercontent.com/50894217/135559853-91b6c873-02ef-45a1-9709-460cfbd45b53.png)
+
