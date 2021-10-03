@@ -35,6 +35,30 @@ export function Header() {
 
 ```
 
+#### Chamadas a api via server-side
+
+- Para usamos chamadas api não usamos o useEffect. O useEffect é executado somente no client(Browser).
+- Como fazer essa chamada pelo server
+
+
+```jsx
+// O nome da function sempre deve ser getServerSideProps para que o next entenda 
+// Sempre deve seguir esse padrão conforme mostramos abaixo
+
+import { GetServerSideProps } from "next";
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {
+        ...
+    }
+  }
+}
+
+//obs: O getServerSideProps ele só é executado no servidor e não no client
+
+```
+
 ### Contexto do Projeto
 
 ![fluxo-de-aplicação (1)](https://user-images.githubusercontent.com/50894217/135559853-91b6c873-02ef-45a1-9709-460cfbd45b53.png)
