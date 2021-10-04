@@ -8,12 +8,14 @@ Toda interação de paginas esse arquivos recarega todos os componentes / estado
 #### _document.tsx 
 - É responsável por carregar nossos script uma única vez... 
 ex: carregamento de fontes
-
+ 
 #### Regra para Criar Pages:
 
 - Dentro do Pages todos os Jsx devem ser exportados como default 
 
 ex: export default
+
+obs: todo arquivo tsx que não seja o _app nem o _document virá uma página.. isso acontece por causa do File Route do Next
 
 #### Regra para trabalhar com imgs no Next:
 
@@ -90,7 +92,45 @@ export const getStaticProps: GetStaticProps = async () => {
 
 ```
 
+
+#### API ROUTERS NEXT (Criando Rota pelo Next)
+
+- Para Criar uma Rota no Next precisamos criar uma pasta chamada /api dentro da pasta pages. Onde cada arquivo vai ser um rota da nossa app
+- Toda api routers elas são criada e executadas com o conceito de serverless.
+
+```jsx
+//segue um exemplo de uma rota que exibe uma lista de usuarios
+import { NextApiRequest, NextApiResponse }  from "next"
+
+export default (request: NextApiRequest, response: NextApiResponse)  => {
+
+  const users = [
+    { id: 1, name: "Rodolfo" },
+    { id: 2, name: "Romulo" },
+    { id: 3, name: "Rivan" }
+  ]
+
+  return response.json(users)
+}
+
+```
+
+##### Parametrização nas Rotas de api do Next
+
+Quando precisamos capturar(Criar) os parametros da nossa rota precisamos seguir os seguintes passos:
+
+- Criar uma pasta que vai ser o nome da rota colocamos
+ ex: 
+    users/
+      [id].tsx -> esse [id] é o nome do paramentro podemos usar [...id] que ira pegar todos os parametros dessa rota de users
+      index.tsx
+
+
+#### Estrategias para Autenticação no Front-End
+
+- JWT (Storage)
+- Next Auth (Social)
+- Cognito, Auth0
 ### Contexto do Projeto
 
 ![fluxo-de-aplicação (1)](https://user-images.githubusercontent.com/50894217/135559853-91b6c873-02ef-45a1-9709-460cfbd45b53.png)
-
