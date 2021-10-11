@@ -125,7 +125,7 @@ Quando precisamos capturar(Criar) os parametros da nossa rota precisamos seguir 
       [id].tsx -> esse [id] é o nome do paramentro podemos usar [...id] que ira pegar todos os parametros dessa rota de users
       index.tsx
 
-
+[link para doc completa](https://next-auth.js.org/getting-started/example)
 #### Estrategias para Autenticação no Front-End
 
 - JWT (Storage)
