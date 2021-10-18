@@ -115,6 +115,9 @@ export default (request: NextApiRequest, response: NextApiResponse)  => {
 
 ```
 
+obs: A Camada de services que usam as variaveis .env(process.env) não podem ser executadas do lado do client(Não podem ser usadas direto no componente executado pelo Browser) e sim do servidor.
+tanto usando api Routes Next ou usam o Modo SSG(Static Site Generation).
+
 ##### Parametrização nas Rotas de api do Next
 
 Quando precisamos capturar(Criar) os parametros da nossa rota precisamos seguir os seguintes passos:
