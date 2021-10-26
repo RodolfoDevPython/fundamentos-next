@@ -129,6 +129,30 @@ Quando precisamos capturar(Criar) os parametros da nossa rota precisamos seguir 
       index.tsx
 
 [link para doc completa](https://next-auth.js.org/getting-started/example)
+
+
+#### Usando variaveis de ambiente pelo cliente
+
+Quando criamos variaveis de ambiente e precisamos acessar pelo cliente 
+
+``` js
+import { loadStripe } from "@stripe/stripe-js";
+
+export async function getStripeJs() {
+    const stripeJs = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+
+    return stripeJs
+}
+```
+
+precisamos usar o prefix NEXT_PUBLIC na frente das variaveis de ambiente 
+
+ex: Doc de .env.local
+
+``` 
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_test_51JeWQFI3RejWguqqeCtnmgApKhG65A1VZcCJm6KsG6iMss9sa5Y6wPlQm1GiqRJtQrZ1k6U7PmVaHsoGFcxP2hli00w079ZU6D
+
+```
 #### Estrategias para Autenticação no Front-End
 
 - JWT (Storage)
