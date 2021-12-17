@@ -17,6 +17,12 @@ ex: export default
 
 obs: todo arquivo tsx que não seja o _app nem o _document virá uma página.. isso acontece por causa do File Route do Next
 
+
+#### Regra para pasta dentro do pages / api :
+- Se precisar criar uma pasta que não seja uma rota precisamos criar a pasta com _ na frente do nome. 
+
+ex: pasta _lib dentro da pasta api
+
 #### Regra para trabalhar com imgs no Next:
 
 - Para usar imagens precisamos somente adicionar elas na pasta public e basta só importa o nome da imagens sem precisar
