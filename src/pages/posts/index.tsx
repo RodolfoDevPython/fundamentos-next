@@ -1,5 +1,6 @@
 import { GetStaticProps } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import styles from "./styles.module.scss";
 import Prismic from "@prismicio/client";
 import { getPrismicClient } from "../../services/prismic";
@@ -18,6 +19,10 @@ interface PostProps {
 
 export default function Posts({ posts }: PostProps) {
 
+    console.log({
+        posts
+    })
+
     return(
         <>
             <Head>
@@ -28,11 +33,14 @@ export default function Posts({ posts }: PostProps) {
                 <div className={styles.posts}>
                     {
                         posts.map( ({ slug, updatedAt, title, excerpt }) => (
-                            <a key={slug} href="#">
+                            <Link href={`/posts/${slug}`} >
+                                <a key={slug} >
                                 <time>{updatedAt}</time>
                                 <strong>{title}</strong>
                                 <p>{excerpt}</p>
                             </a>
+                            </Link>
+                            
                         ))
                     }
                     
@@ -43,7 +51,7 @@ export default function Posts({ posts }: PostProps) {
 
 }
 
-//essa page vai ser estatica para evitar gastar recursos de busca de conteúdos no PRISMIC CMS
+//Essa page vai ser estatica para evitar gastar recursos de busca de conteúdos no PRISMIC CMS
 export const getStaticProps: GetStaticProps = async () => {
 
     const prismic = getPrismicClient();
@@ -61,7 +69,9 @@ export const getStaticProps: GetStaticProps = async () => {
     console.log(JSON.stringify(response, null, 2));
 
     const posts = response.results.map(post => {
+
         console.log({
+            post,
             slug: post.id,
             title: RichText.asText(post.data.title),
             excerpt: post.data.content.find(content => content.type === "paragraph")?.text ?? "",
