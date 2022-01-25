@@ -15,6 +15,18 @@ export default NextAuth({
     // ...add more providers here
   ],
   callbacks: {
+    //Criar validação de usuario ativo por session que possa ser acessado por varios lugares da aplicação
+    async session(session) {
+      // const userActiveSubscription = await fauna.query(
+      //   q.Get(
+      //     q.Match(
+      //       q.Index('subscription_by_user_ref')
+      //     )
+      //   )
+      // )
+
+      return session
+    },
     async signIn(user, account, profile) {
 
       const { email } = user;
