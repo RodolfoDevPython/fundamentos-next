@@ -19,10 +19,6 @@ interface PostProps {
 
 export default function Posts({ posts }: PostProps) {
 
-    console.log({
-        posts
-    })
-
     return(
         <>
             <Head>
@@ -66,21 +62,10 @@ export const getStaticProps: GetStaticProps = async () => {
             pageSize: 100
     });
 
-    console.log(JSON.stringify(response, null, 2));
+    
 
     const posts = response.results.map(post => {
 
-        console.log({
-            post,
-            slug: post.id,
-            title: RichText.asText(post.data.title),
-            excerpt: post.data.content.find(content => content.type === "paragraph")?.text ?? "",
-            updatedAt: new Date(post.last_publication_date).toLocaleDateString("pt-BR", {
-                day: '2-digit',
-                month: "long",
-                year: 'numeric'
-            })
-        })
         return {
             slug: post.id,
             title: RichText.asText(post.data.title),
@@ -91,6 +76,7 @@ export const getStaticProps: GetStaticProps = async () => {
                 year: 'numeric'
             })
         }
+
     })
     
     return {

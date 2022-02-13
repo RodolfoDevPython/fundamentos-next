@@ -29,32 +29,58 @@ export const config = {
 }
 
 const relevantEvents = new Set([
-    'checkout.session.completed'
+    'checkout.session.completed',
+    'customer.subscription.created',
+    'customer.subscription.updated',
+    'customer.subscription.deleted'
 ])
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
-    console.log("webhooks");
+    console.log("webhooks 1233");
 
     if (req.method === "POST") {
+        console.log("webhooks entroou");
         const buf = await buffer(req)
         const secret = req.headers['stripe-signature'];
 
         let event: Stripe.Event;
 
         try {
-            event = stripe.webhooks.constructEvent(buf, secret, "");
+            event = stripe.webhooks.constructEvent(buf, secret, process.env.STRIPE_WEBHOOK_SECRET);
         } catch (error) {
+            console.log({
+                error
+            })
             return res.status(400).send(`Webhook error: ${error.message}`);
         }
 
         const { type } = event;
+
+        console.log({
+            type
+        })
 
         if (relevantEvents.has(type)) {
 
             try {
 
                 switch (type) {
+                    
+                    case 'customer.subscription.created':
+                    case 'customer.subscription.updated':
+                    case 'customer.subscription.deleted':
+
+                        const subscription = event.data.object as Stripe.Subscription;
+                        
+                        await saveSubscription(
+                            subscription.id,
+                            subscription.customer.toString(),
+                            type === "customer.subscription.created"
+                        );
+
+                        break;
+
                     case "checkout.session.completed":
 
                         const checkoutSession = event.data.object as Stripe.Checkout.Session;
@@ -82,6 +108,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         
 
     } else {
+        console.log("webhooks saiu");
         res.setHeader("Allow", "POST")
         res.status(405).end("Method not allowed")
     }
