@@ -31,10 +31,10 @@ export default function Posts({ posts }: PostProps) {
                         posts.map( ({ slug, updatedAt, title, excerpt }) => (
                             <Link href={`/posts/${slug}`} >
                                 <a key={slug} >
-                                <time>{updatedAt}</time>
-                                <strong>{title}</strong>
-                                <p>{excerpt}</p>
-                            </a>
+                                    <time>{updatedAt}</time>
+                                    <strong>{title}</strong>
+                                    <p>{excerpt}</p>
+                                </a>
                             </Link>
                             
                         ))
@@ -67,7 +67,7 @@ export const getStaticProps: GetStaticProps = async () => {
     const posts = response.results.map(post => {
 
         return {
-            slug: post.id,
+            slug: post.uid,
             title: RichText.asText(post.data.title),
             excerpt: post.data.content.find(content => content.type == "paragraph")?.text ?? "",
             updatedAt: new Date(post.last_publication_date).toLocaleDateString("pt-BR", {
