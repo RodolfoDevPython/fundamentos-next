@@ -95,8 +95,21 @@ export const getStaticProps: GetStaticProps = async () => {
     revalidate: 60 * 60 * 24, //24 hours
   }
 }
-
 ```
+
+Uma propriedade important no SSG é o getStaticPaths
+
+```jsx
+  export const getStaticPaths = () => {
+      return {
+          paths: [], //-> Serve para indicar quais páginas serão geradas de forma estática durante o build
+          fallback: 'blocking'
+      }
+  }
+```
+Caso o atributo paths do getStaticPaths esteja vazio, a geração das páginas será estáticas no primeiro acesso.
+
+obs: getStaticPaths só funcionam com páginas que tenham parametros dinâmicos.
 
 
 #### API ROUTERS NEXT (Criando Rota pelo Next)
@@ -166,4 +179,4 @@ NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_test_51JeWQFI3RejWguqqeCtnmgApKhG65A1VZcCJm6KsG
 - Cognito, Auth0
 ### Contexto do Projeto
 
-![fluxo-de-aplicação (1)](https://user-images.githubusercontent.com/50894217/135559853-91b6c873-02ef-45a1-9709-460cfbd45b53.png)
+![fluxo-de-aplicação (1)](https://user-images.githubusercontent.com/50894217/135559853-91b6c873-02ef-45a1-9709-460cfbd45b53.png)1
