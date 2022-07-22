@@ -1,0 +1,98 @@
+# Teste React
+
+## Preparando o Ambiente
+
+Para iniciar com os nossos teste precisamos adicionar algumas dependencias importantes. Basta instalar as seguintes libs
+
+```shell
+yarn add jest jest-dom @testing-library/jest-dom @testing-library/dom @testing-library/react babel-jest -D
+```
+
+Configuramos os arquivos de babel.config.js e jest.config.js
+
+
+```js
+//arquivo -> babel.config.js
+module.exports = {
+    presets: ["next/babel"]
+}
+```
+
+```js
+//arquivo -> jest.config.js
+module.exports = {
+    testPathIgnorePatterns: ["/node_modules/", "/.next/"],
+    setupFilesAfterEnv: [
+        "<rootDir>/src/tests/setupTest.ts" //arquivvos de setup para o jest executar antes de iniciar os testes 
+    ],
+    transform: {
+        "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest"
+    }, //Configuração usada para transforma os arquivos escritos em typescript - O jest não entende typescript
+    testEnvironment: 'jsdom'
+};
+```
+
+### Jest 
+
+[Jest](https://jestjs.io/pt-BR/) é um poderoso Framework de Testes em JavaScript com um foco na simplicidade.
+
+#### mock
+
+[Funções de simulação ( mocks em inglês )](https://jestjs.io/pt-BR/docs/mock-functions) permitem que você teste os links entre códigos, apagando a implementação real de uma função, capturando chamadas para a função (e os parâmetros passados nessas chamadas), capturar instâncias do construtor de funções quando instanciado com new, e permitindo configuração em tempo de teste de valores de retorno.
+
+Existem duas maneiras de simular funções: Seja criando uma função simulada para usar no código de teste, ou escrevendo uma simulação manual para sobrescrever uma dependência de modulo.
+
+Exemplo da aplicação de um mock realizando um teste em um componente
+~
+
+```jsx
+//Component
+import { useRouter } from "next/dist/client/router";
+
+export function ActiveLink({ children, activeClassName, ...rest }: ActiveLinkProps) {
+
+    const { asPath } = useRouter();
+    
+    const className = asPath === rest.href
+    ? activeClassName
+    : '';
+
+    return (
+        <div className>
+            {...children}
+        </div>
+    )
+}
+```
+
+```jsx
+//Test Component               
+import { render } from "@testing-library/react"
+import { ActiveLink } from "."
+
+//Criação de mock tem um das suas utilizades fazer uma copia da funcionalidades externas(No caso a funcionalidade de router do next)
+jest.mock('next/dist/client/router', () => {
+    return {
+        useRouter() {
+            return {
+                asPath: '/'
+            }
+        }
+    }
+}) 
+
+
+test('active link renders correctly', () => {
+    const { debug } = render(
+
+        <ActiveLink href="/" activeClassName="active">
+            <a>Home</a>
+        </ActiveLink>
+    )
+
+    debug()
+
+})
+```
+> a function debug é responsável por exibir pelo terminal como está sendo gerado o "HTML Virtual" para a execução dos teste
+
