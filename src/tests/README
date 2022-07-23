@@ -101,3 +101,81 @@ test('active link renders correctly', () => {
 ```
 > a function debug é responsável por exibir pelo terminal como está sendo gerado o "HTML Virtual" para a execução dos teste
 
+#### ts-jest-mock
+
+Usando o pacote mocked dentro ts-jest conseguimos resolver um problema de mock.
+
+```shell
+yarn add ts-jest-mock -D
+```
+
+Segue um exemplo de um cenário:
+
+Precisamos testar o nosso componente SignInButton. 
+
+Dessa forma vamos adicionar o mock 
+```jsx
+import { signIn , useSession, signOut } from "next-auth/client";
+
+export function SignInButton() {
+
+    const [session] = useSession();
+
+    return session ? (
+        <button 
+            type="button"
+            onClick={() => signOut()}
+        >
+            Logado
+        </button>
+    ) :
+    (
+        <button 
+            type="button"
+            onClick={() => signIn("github")}
+        >
+            Sign in with github
+        </button>   
+    )
+}
+```
+
+como já sabemos para realizar um teste nesse componente, vamos precisar fazer o mock do next-auth/client.
+
+```js
+jest.mock('next-auth/client', () => {
+    return {
+        useSession() {
+            return [null, false]
+        }
+    }
+}) 
+```
+
+para não precisar adicionar um outro mock para testar outro cenário do useSession, seguimos da seguinte forma:
+
+Adicionamos somente uma referencia para criação do mock no next-auth/client
+
+```js
+jest.mock('next-auth/client') 
+```
+
+Depois adicionamos o mocked do ts-jest/utils para realizar o teste em um cenário especifico sem precisar reescrever todo o jest.mock. Segue o exemplo abaixo
+
+```js
+describe("SignInButton component", () => {
+
+    it('renders correctly when user is not authenticated', () => {
+
+        const useSessionMocked = createMock(useSession)        
+
+        useSessionMocked.mockReturnValue([null, false]); //aplica a anteração de state do mock antes de renderiar o componente
+
+        const {debug} = render(<SignInButton />)
+    
+        expect(screen.getByText("Sign in with github")).toBeInTheDocument()
+
+        debug()
+    })
+})
+```
