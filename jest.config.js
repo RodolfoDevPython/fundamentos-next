@@ -6,5 +6,8 @@ module.exports = {
     transform: {
         "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest"
     }, //Configuração usada para transforma os arquivos escritos em typescript - O jest não entende typescript
-    testEnvironment: 'jsdom'
+    testEnvironment: 'jsdom',
+    moduleNameMapper: {
+        "\\.(scss|css|scss)$": "identity-obj-proxy"
+    }
 };
