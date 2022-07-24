@@ -206,3 +206,24 @@ Dentro do expect podemos recuperar se uma função foi chamada. exemplo
 ```
 
 Podemos verificar se a função foi chamada utilizando algum parametro especifico. Basta realizar a troca de toHaveBeenCalled() por toHaveBeenCalledWith("/{parametro especifico}")
+
+
+#### Trabalhando com funções assincronas
+
+para mocar funções assincronas que retornam uma Promisse utilizamos o mockResolvedValueOnce. Exemplo
+
+```js
+describe("Home page", () => {
+
+    it("loads initial data", () => {
+        const retrievStripePricesMocked = createMock(
+            //Função assincrona que retonar uma Promise para ser mocada
+        );
+
+        retrievStripePricesMocked.mockResolvedValueOnce({
+            //adicionamos os retornos dessa Promisse
+        }) //Utilizamos o 
+    });
+     
+})
+```
