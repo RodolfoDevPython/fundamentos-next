@@ -179,3 +179,30 @@ describe("SignInButton component", () => {
     })
 })
 ```
+
+
+#### expect
+
+Dentro do expect podemos recuperar se uma função foi chamada. exemplo
+
+```js
+
+    it('redirects user to sign in when not authenticated', () => {
+        const signInMocked = createMock(signIn);
+        const useSessionMocked = createMock(useSession);
+        
+        useSessionMocked.mockReturnValueOnce([null, false]);
+
+        render(<SubscribeButton />)
+
+        const subscribeButton = screen.getByText("Subscribe now");
+
+        //simulação de um click sobre o botão
+        fireEvent.click(subscribeButton);
+
+        expect(signInMocked).toHaveBeenCalled() //verificar se a function 
+    })
+
+```
+
+Podemos verificar se a função foi chamada utilizando algum parametro especifico. Basta realizar a troca de toHaveBeenCalled() por toHaveBeenCalledWith("/{parametro especifico}")
