@@ -227,3 +227,97 @@ describe("Home page", () => {
      
 })
 ```
+
+
+### Dicas em testes unitários
+
+[Métodos assíncronos](https://testing-library.com/docs/dom-testing-library/api-async)
+Vários utilitários são fornecidos para lidar com código assíncrono. Eles podem ser úteis para esperar que um elemento apareça ou desapareça em resposta a um evento, ação do usuário, tempo limite ou promessa. (Consulte o guia para testar o desaparecimento .)
+
+Os métodos assíncronos retornam Promises, portanto, certifique-se de usar awaitou .thenao chamá-los.
+
+[Doc completa sobre Métodos assíncronos no testing-library](https://testing-library.com/docs/dom-testing-library/api-async)
+
+#### Testes assíncronos 
+
+Quando precisamos testar um componente assincrono precisamos mudar algumas coisas nos testes.
+Segue o exemplo de um componente que renderiza um elemento dinamicamente:
+
+```jsx
+//Async.jsx
+export function Async() {
+    const [isButtonVisible, setIsButtonVisible] = useState(false);
+
+    useEffect( () => { 
+        setTimeout( () => {
+            setIsButtonVisible(true);
+        }, 1000);
+    }, []);
+
+    return(
+        <div> 
+            <div>Hello World</div>
+            { isButtonVisible && <button>Button</button> }
+        </div>
+    )
+}
+
+```
+
+```jsx
+//Async.spect.jsx
+import { render, screen } from "@testing-library/react";
+import { Async } from ".";
+
+test("it renders correctly", async () => {
+    render(<Async />);
+
+    expect(screen.getByText("Hello World")).toBeInTheDocument();//quando o componente renderiza pela primeira vez
+    expect(await screen.findByText("Button")).toBeInTheDocument();//Espera o teste ser carregado em tela
+});
+
+```
+
+#### Testing playground
+
+Para utilizar o playground de teste basta usar a função logTestingPlaygroundURL() de dentro do screen
+
+```jsx
+//Async.spect.jsx
+import { render, screen } from "@testing-library/react";
+import { Async } from ".";
+
+test("it renders correctly", async () => {
+    render(<Async />);
+
+    screen.logTestingPlaygroundURL();
+
+    expect(screen.getByText("Hello World")).toBeInTheDocument();//quando o componente renderiza pela primeira vez
+    expect(await screen.findByText("Button")).toBeInTheDocument();//Espera o teste ser carregado em tela
+});
+
+```
+
+#### Coverage report
+
+[Coverage report](https://jestjs.io/pt-BR/docs/configuration#collectcoverage-boolean) Permite se a cobertura devem ser coletadas durante a execução do teste. Como isso adapta todos os arquivos executados com instruções de coleta de cobertura, pode desacelerar significativamente seus testes.
+
+Precisamos adicionar essas config para o jest
+```js
+//jest.config.js
+module.exports = {
+    ...,
+    collectCoverage: true,
+    collectCoverageFrom: [
+        "src/**/*.tsx",
+        "!src/**/*spec.tsx",
+    ],
+    coverageReporters: ["json", "lcov"]
+};
+```
+
+Basta rodar o comamdo abaixo com a flag --coverage:
+
+```shell
+    yarn test --coverage
+```
